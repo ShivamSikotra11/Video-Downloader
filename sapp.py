@@ -2,6 +2,7 @@
 # import time
 # import streamlit as st
 # from pytube import Playlist, YouTube
+# from pytube.exceptions import RegexMatchError, VideoUnavailable
 
 # # Global variables to track the progress and speed
 # last_time = time.time()
@@ -48,6 +49,10 @@
 #         st.write(f"\nDownloading '{yt.title}' as '{filename}'...")
 #         stream.download(output_path, filename=filename)
 #         st.write(f"\nDownloaded '{yt.title}' successfully as '{filename}'!")
+#     except RegexMatchError:
+#         st.error("Regex match error: YouTube URL format is incorrect.")
+#     except VideoUnavailable:
+#         st.error("Video unavailable: This video may be private or deleted.")
 #     except Exception as e:
 #         st.error(f"Error: {e}")
 
@@ -68,6 +73,10 @@
 #             st.write(f"\nDownloading video {idx + 1 - start_video} of {end_video - start_video}: {video_url}")
 #             download_youtube_video(video_url, idx, output_path)
 
+#     except RegexMatchError:
+#         st.error("Regex match error: YouTube URL format is incorrect.")
+#     except VideoUnavailable:
+#         st.error("Video unavailable: This video may be private or deleted.")
 #     except Exception as e:
 #         st.error(f"Error: {e}")
 
@@ -78,13 +87,19 @@
 # playlist_url = st.text_input('Enter the YouTube Playlist URL:')
 # start_video = st.number_input('Enter the start video index (starting from 1):', min_value=1, value=1)
 # end_video = st.number_input('Enter the end video index (starting from 1):', min_value=1, value=1)
-# save_path = st.text_input('Enter the directory to save the videos (default is current directory):', '.')
+
+# # Text input for choosing the directory to save the videos
+# save_path = st.text_input('Enter or paste the full directory path to save the videos:', '.')
 
 # if st.button('Download Videos'):
-#     if playlist_url:
+#     if playlist_url and os.path.isdir(save_path):
 #         download_playlist_videos(playlist_url, int(start_video), int(end_video), save_path)
-#     else:
+#     elif not playlist_url:
 #         st.warning('Please enter a valid Playlist URL.')
+#     elif not os.path.isdir(save_path):
+#         st.warning('Please enter a valid directory path to save the videos.')
+
+
 
 
 
