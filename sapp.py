@@ -104,12 +104,11 @@
 
 
 
-
 import os
 import time
 import streamlit as st
 from pytube import Playlist, YouTube
-from pytube.exceptions import RegexMatchError, VideoUnavailable
+from pytube.exceptions import RegexMatchError, VideoUnavailable, HTTPError
 
 # Global variables to track the progress and speed
 last_time = time.time()
@@ -163,6 +162,8 @@ def download_youtube_video(url, video_index):
         st.error("Regex match error: YouTube URL format is incorrect.")
     except VideoUnavailable:
         st.error("Video unavailable: This video may be private or deleted.")
+    except HTTPError as e:
+        st.error(f"HTTP Error 400: Bad Request - {e}")
     except Exception as e:
         st.error(f"Error: {e}")
 
@@ -190,6 +191,8 @@ def download_playlist_videos(playlist_url, start_video, end_video):
         st.error("Regex match error: YouTube URL format is incorrect.")
     except VideoUnavailable:
         st.error("Video unavailable: This video may be private or deleted.")
+    except HTTPError as e:
+        st.error(f"HTTP Error 400: Bad Request - {e}")
     except Exception as e:
         st.error(f"Error: {e}")
 
